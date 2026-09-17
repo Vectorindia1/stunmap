@@ -10,9 +10,9 @@ import androidx.compose.ui.viewinterop.AndroidView
 import org.maplibre.android.camera.CameraPosition
 import org.maplibre.android.geometry.LatLng
 import org.maplibre.android.maps.MapView
-import org.maplibre.android.maps.Style
-import org.maplibre.android.plugins.annotation.SymbolManager
-import org.maplibre.android.plugins.annotation.SymbolOptions
+
+private const val MAP_STYLE_URL =
+    "https://basemaps.cartocdn.com/gl/dark-matter-gl-style/style.json"
 
 @Composable
 fun GeoMapView(
@@ -44,12 +44,11 @@ fun GeoMapView(
                     ViewGroup.LayoutParams.MATCH_PARENT
                 )
                 getMapAsync { map ->
-                    map.setStyle(Style.DARK) { style ->
+                    map.setStyle(MAP_STYLE_URL) { _ ->
                         map.cameraPosition = CameraPosition.Builder()
                             .target(LatLng(latitude, longitude))
                             .zoom(zoom)
                             .build()
-
                         map.uiSettings.isZoomGesturesEnabled = true
                         map.uiSettings.isScrollGesturesEnabled = true
                     }

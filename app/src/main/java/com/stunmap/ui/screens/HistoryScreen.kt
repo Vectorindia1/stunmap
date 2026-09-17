@@ -11,16 +11,14 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Divider
-import androidx.compose.material3.DismissDirection
-import androidx.compose.material3.DismissValue
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.SwipeToDismiss
+import androidx.compose.material3.SwipeToDismissBox
+import androidx.compose.material3.SwipeToDismissBoxValue
 import androidx.compose.material3.Text
-import androidx.compose.material3.rememberDismissState
+import androidx.compose.material3.rememberSwipeToDismissBoxState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -93,20 +91,21 @@ fun HistoryScreen(
         } else {
             LazyColumn {
                 items(sessions, key = { it.id }) { session ->
-                    val dismissState = rememberDismissState(
+                    val dismissState = rememberSwipeToDismissBoxState(
                         confirmValueChange = { value ->
-                            if (value == DismissValue.DismissedToStart) {
+                            if (value == SwipeToDismissBoxValue.EndToStart) {
                                 viewModel.deleteSession(session)
                                 true
                             } else false
                         }
                     )
 
-                    SwipeToDismiss(
+                    SwipeToDismissBox(
                         state = dismissState,
-                        directions = setOf(DismissDirection.EndToStart),
-                        background = {},
-                        dismissContent = {
+                        enableDismissFromStartToEnd = false,
+                        enableDismissFromEndToStart = true,
+                        backgroundContent = {},
+                        content = {
                             SessionRow(
                                 session = session,
                                 dateFormat = dateFormat,
@@ -154,9 +153,7 @@ private fun SessionRow(
             }
         }
         Text(
-            text = "${session.candidateCount} candidate(s) · ${session.stunHitCount} STUN pkts · ${
-                formatDuration(session.durationMs)
-            }",
+            text = "${session.candidateCount} candidate(s) · ${session.stunHitCount} STUN pkts · ${formatDuration(session.durationMs)}",
             fontFamily = JetBrainsMonoFamily,
             fontSize = 11.sp,
             color = TextSecondary
