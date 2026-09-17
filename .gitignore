@@ -1,0 +1,21 @@
+*.iml
+.gradle
+/local.properties
+/.idea
+.DS_Store
+/build
+/captures
+.externalNativeBuild
+.cxx
+local.properties
+
+# MaxMind GeoLite2 DB — download separately (see CLOUD.md)
+app/src/main/assets/GeoLite2-City.mmdb
+
+# Signing keys — never commit these
+keystore.properties
+*.keystore
+*.jks
+
+# Generated
+app/build/
