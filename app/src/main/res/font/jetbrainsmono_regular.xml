@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Download JetBrains Mono Regular from https://fonts.google.com/specimen/JetBrains+Mono -->
-<!-- Place the .ttf file as jetbrainsmono_regular.ttf in this directory -->
-<font-family xmlns:app="http://schemas.android.com/apk/res-auto"
-    app:fontProviderAuthority="com.google.android.gms.fonts"
-    app:fontProviderPackage="com.google.android.gms"
-    app:fontProviderQuery="JetBrains Mono"
-    app:fontProviderCerts="@array/com_google_android_gms_fonts_certs"/>
+<!--
+    Placeholder font-family. To enable JetBrains Mono:
+    download jetbrainsmono_regular.ttf from https://www.jetbrains.com/lp/mono/
+    and place it in this directory as jetbrainsmono_regular.ttf, then update
+    this file to reference it with android:font.
+    Until then the app falls back to the system monospace font at runtime.
+-->
+<font-family xmlns:android="http://schemas.android.com/apk/res/android">
+</font-family>
