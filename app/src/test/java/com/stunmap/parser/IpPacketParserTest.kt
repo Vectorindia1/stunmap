@@ -98,7 +98,7 @@ class IpPacketParserTest {
         dstIp.copyInto(packet, 16)
 
         // UDP header
-        packet[20] = 0x10; packet[21] = 0x92 // src port 4242
+        packet[20] = 0x10; packet[21] = 0x92.toByte() // src port 4242
         packet[22] = 0x23; packet[23] = 0x28 // dst port 9000
         val udpLen = udpHeaderLen + udpPayload.size
         packet[24] = (udpLen shr 8).toByte()
