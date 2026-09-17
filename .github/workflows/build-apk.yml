@@ -5,6 +5,9 @@ on:
     branches: [main]
   workflow_dispatch:
 
+permissions:
+  contents: write   # needed to create/update GitHub Releases
+
 jobs:
   build:
     name: Build debug APK
@@ -52,7 +55,7 @@ jobs:
       - name: Build debug APK
         run: ./gradlew assembleDebug --no-daemon
 
-      - name: Upload debug APK
+      - name: Upload debug APK artifact
         uses: actions/upload-artifact@v4
         with:
           name: STUNMAP-debug-${{ github.sha }}
@@ -64,3 +67,25 @@ jobs:
           apk=app/build/outputs/apk/debug/app-debug.apk
           echo "Size:   $(du -sh $apk | cut -f1)"
           echo "SHA256: $(sha256sum $apk | cut -d' ' -f1)"
+
+      - name: Publish APK to GitHub Releases
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          SHORT_SHA="${GITHUB_SHA::7}"
+          APK_NAME="STUNMAP-debug-${SHORT_SHA}.apk"
+          cp app/build/outputs/apk/debug/app-debug.apk "${APK_NAME}"
+
+          # Remove the old rolling release/tag if it exists
+          gh release delete latest-debug --yes 2>/dev/null || true
+          git push origin :refs/tags/latest-debug 2>/dev/null || true
+
+          gh release create latest-debug \
+            --title "STUNMAP Debug APK — latest (${SHORT_SHA})" \
+            --notes "**Auto-built debug APK** from commit [\`${SHORT_SHA}\`](https://github.com/${{ github.repository }}/commit/${{ github.sha }}).
+
+          > [!WARNING]
+          > This is an unsigned **debug** build for evaluation and testing only.
+          > For offline IP geolocation add your own \`GeoLite2-City.mmdb\` — see [CLOUD.md](https://github.com/${{ github.repository }}/blob/main/CLOUD.md)." \
+            --prerelease \
+            "${APK_NAME}"
