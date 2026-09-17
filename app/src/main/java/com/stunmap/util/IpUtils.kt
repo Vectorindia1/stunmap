@@ -16,7 +16,7 @@ fun ByteArray.ipBytesToString(): String {
 
 fun String.isPrivateIp(): Boolean {
     val parts = split(".").mapNotNull { it.toIntOrNull() }
-    if (parts.size != 4) return false
+    if (parts.size != 4) return true // safe default: treat unparseable as private
     return when {
         parts[0] == 10 -> true
         parts[0] == 172 && parts[1] in 16..31 -> true
