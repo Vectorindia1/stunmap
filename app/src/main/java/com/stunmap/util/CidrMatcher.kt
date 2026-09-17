@@ -9,6 +9,7 @@ class CidrMatcher(cidr: String) {
         require(parts.size == 2) { "Invalid CIDR: $cidr" }
         val ipParts = parts[0].split(".").map { it.toInt() }
         require(ipParts.size == 4) { "Invalid IP in CIDR: $cidr" }
+        require(ipParts.all { it in 0..255 }) { "Octet out of range in CIDR: $cidr" }
         val prefixLen = parts[1].toInt()
         require(prefixLen in 0..32) { "Invalid prefix length: $prefixLen" }
 
